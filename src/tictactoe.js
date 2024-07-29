@@ -71,7 +71,7 @@ const TicTacToe = () => {
       </div>
       {message && (
         <div className=" flex flex-col justify-center items-center gap-16 absolute inset-0 bg-custom-bg bg-opacity-75">
-          <p className="text-5vmin max-w-80 font-semibold bg-custom-box-bg text-custom-btn-bg rounded-xl">{message}</p>
+          <p className="text-5vmin w-96 font-semibold bg-custom-box-bg text-custom-btn-bg rounded-xl">{message}</p>
           <button className="bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>New Game</button>
         </div>
       )}
