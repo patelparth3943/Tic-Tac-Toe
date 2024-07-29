@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import "./App.css"
 
 const TicTacToe = () => {
   const [boxes, setBoxes] = useState(Array(9).fill(''));
@@ -76,7 +75,7 @@ const TicTacToe = () => {
           <button className="bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>New Game</button>
         </div>
       )}
-      <button className="mt-10 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>Reset Game</button>
+      <button className="mt-20 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>Reset Game</button>
     </div>
   );
 };
