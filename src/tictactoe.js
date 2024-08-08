@@ -27,10 +27,15 @@ const TicTacToe = () => {
       if (newBoxes[a] && newBoxes[a] === newBoxes[b] && newBoxes[a] === newBoxes[c]) {
         setMessage(`Congratulations, Winner is ${newBoxes[a]}`);
         setGameOver(true);
-        return true;
+        return newBoxes[a];
       }
     }
-    return false;
+    if (newBoxes.every(box => box)) {
+      setMessage('Game was a Draw.');
+      setGameOver(true);
+      return 'draw';
+    }
+    return null;
   };
 
   const handleBoxClick = (index) => {
@@ -45,43 +50,76 @@ const TicTacToe = () => {
     newBoxes[index] = turnO ? 'O' : 'X';
     setBoxes(newBoxes);
 
-    const isWinner = checkWinner(newBoxes);
-    if (!isWinner && newBoxes.every(box => box)) {
-      setMessage('Game was a Draw.');
-      setGameOver(true);
-    } else {
+    const winner = checkWinner(newBoxes);
+    if (!winner) {
       setTurnO(!turnO);
     }
   };
 
   const aiMove = () => {
     const newBoxes = [...boxes];
+    const bestMove = findBestMove(newBoxes);
+    handleBoxClick(bestMove);
+  };
 
-    // Try to win
+  const findBestMove = (newBoxes) => {
+    let bestVal = -1000;
+    let bestMove = -1;
+    for (let i = 0; i < newBoxes.length; i++) {
+      if (newBoxes[i] === '') {
+        newBoxes[i] = 'X';
+        const moveVal = minimax(newBoxes, 0, false);
+        newBoxes[i] = '';
+        if (moveVal > bestVal) {
+          bestMove = i;
+          bestVal = moveVal;
+        }
+      }
+    }
+    return bestMove;
+  };
+
+  const minimax = (newBoxes, depth, isMax) => {
+    const score = evaluate(newBoxes);
+    if (score === 10) return score - depth;
+    if (score === -10) return score + depth;
+    if (newBoxes.every(box => box)) return 0;
+
+    if (isMax) {
+      let best = -1000;
+      for (let i = 0; i < newBoxes.length; i++) {
+        if (newBoxes[i] === '') {
+          newBoxes[i] = 'X';
+          best = Math.max(best, minimax(newBoxes, depth + 1, !isMax));
+          newBoxes[i] = '';
+        }
+      }
+      return best;
+    } else {
+      let best = 1000;
+      for (let i = 0; i < newBoxes.length; i++) {
+        if (newBoxes[i] === '') {
+          newBoxes[i] = 'O';
+          best = Math.min(best, minimax(newBoxes, depth + 1, !isMax));
+          newBoxes[i] = '';
+        }
+      }
+      return best;
+    }
+  };
+
+  const evaluate = (newBoxes) => {
     for (let pattern of winPatterns) {
       const [a, b, c] = pattern;
-      if (newBoxes[a] === 'X' && newBoxes[b] === 'X' && !newBoxes[c]) return c;
-      if (newBoxes[a] === 'X' && newBoxes[c] === 'X' && !newBoxes[b]) return b;
-      if (newBoxes[b] === 'X' && newBoxes[c] === 'X' && !newBoxes[a]) return a;
+      if (newBoxes[a] === 'X' && newBoxes[b] === 'X' && newBoxes[c] === 'X') return 10;
+      if (newBoxes[a] === 'O' && newBoxes[b] === 'O' && newBoxes[c] === 'O') return -10;
     }
-
-    // Try to block O from winning
-    for (let pattern of winPatterns) {
-      const [a, b, c] = pattern;
-      if (newBoxes[a] === 'O' && newBoxes[b] === 'O' && !newBoxes[c]) return c;
-      if (newBoxes[a] === 'O' && newBoxes[c] === 'O' && !newBoxes[b]) return b;
-      if (newBoxes[b] === 'O' && newBoxes[c] === 'O' && !newBoxes[a]) return a;
-    }
-
-    // Make a random move
-    const emptyIndexes = newBoxes.map((box, idx) => box === '' ? idx : null).filter(idx => idx !== null);
-    return emptyIndexes[Math.floor(Math.random() * emptyIndexes.length)];
+    return 0;
   };
 
   useEffect(() => {
     if (!turnO && !gameOver && mode === 'robot') {
-      const index = aiMove();
-      handleBoxClick(index);
+      aiMove();
     }
   }, [turnO, mode]);
 
