@@ -8,7 +8,9 @@ const TicTacToe = () => {
   const [message, setMessage] = useState('');
   const [gameOver, setGameOver] = useState(false);
   const [mode, setMode] = useState(null);
+  const [difficulty, setDifficulty] = useState(null);
   const [modeSelected, setModeSelected] = useState(false);
+  const [difficultySelected, setDifficultySelected] = useState(false);
 
   const winPatterns = [
     [0, 1, 2],
@@ -58,8 +60,37 @@ const TicTacToe = () => {
 
   const aiMove = () => {
     const newBoxes = [...boxes];
+    const index = difficulty === 'easy' ? easyMove(newBoxes) : hardMove(newBoxes);
+    handleBoxClick(index);
+  };
+
+  const easyMove = (newBoxes) => {
+    // Easy mode logic
+    // Try to win
+    for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (newBoxes[a] === 'X' && newBoxes[b] === 'X' && !newBoxes[c]) return c;
+      if (newBoxes[a] === 'X' && newBoxes[c] === 'X' && !newBoxes[b]) return b;
+      if (newBoxes[b] === 'X' && newBoxes[c] === 'X' && !newBoxes[a]) return a;
+    }
+
+    // Try to block O from winning
+    for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (newBoxes[a] === 'O' && newBoxes[b] === 'O' && !newBoxes[c]) return c;
+      if (newBoxes[a] === 'O' && newBoxes[c] === 'O' && !newBoxes[b]) return b;
+      if (newBoxes[b] === 'O' && newBoxes[c] === 'O' && !newBoxes[a]) return a;
+    }
+
+    // Make a random move
+    const emptyIndexes = newBoxes.map((box, idx) => box === '' ? idx : null).filter(idx => idx !== null);
+    return emptyIndexes[Math.floor(Math.random() * emptyIndexes.length)];
+  };
+
+  const hardMove = (newBoxes) => {
+    // Hard mode logic using Minimax
     const bestMove = findBestMove(newBoxes);
-    handleBoxClick(bestMove);
+    return bestMove;
   };
 
   const findBestMove = (newBoxes) => {
@@ -121,7 +152,7 @@ const TicTacToe = () => {
     if (!turnO && !gameOver && mode === 'robot') {
       aiMove();
     }
-  }, [turnO, mode]);
+  }, [turnO, mode, difficulty]);
 
   const resetGame = () => {
     setBoxes(Array(9).fill(''));
@@ -134,7 +165,14 @@ const TicTacToe = () => {
   const handleModeChange = (value) => {
     setMode(value);
     setModeSelected(true);
+    setDifficulty(null);
+    setDifficultySelected(false);
     setMessage(''); // Clear the message when mode is selected
+  };
+
+  const handleDifficultyChange = (value) => {
+    setDifficulty(value);
+    setDifficultySelected(true);
   };
 
   return (
@@ -154,6 +192,22 @@ const TicTacToe = () => {
           </Select.Content>
         </Select.Root>
       </div>
+      
+      {mode === 'robot' && modeSelected && (
+        <div className="flex justify-center items-center w-full px-10 mt-4">
+          <Select.Root onValueChange={handleDifficultyChange}>
+            <Select.Trigger className="w-[180px] bg-custom-box-bg cursor-pointer text-white rounded-md">
+              <Select.Value placeholder="Select Difficulty">
+                {difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.slice(1) : "Select Difficulty"}
+              </Select.Value>
+            </Select.Trigger>
+            <Select.Content className='bg-custom-box-bg text-white rounded-md' position="popper" align="end">
+              <Select.Item value="easy" className='border-2 cursor-pointer'>Easy</Select.Item>
+              <Select.Item value="hard" className='border-2 cursor-pointer'>Hard</Select.Item>
+            </Select.Content>
+          </Select.Root>
+        </div>
+      )}
       
       <div className="flex justify-center items-center h-4/5 mt-6">
         <div className="grid grid-cols-3 max-w-md mx-auto justify-center items-center gap-6 w-60vmin h-60vmin">
