@@ -26,6 +26,13 @@ module.exports = {
         '1rem': '1rem',
       },
     },
+    fontFamily:{
+      signature:["Signika Negative "],
+      playwrite: ['"Playwrite HR Lijeva"', 'cursive'],
+      roboto: ['"Roboto Flex"', 'san-serif'],
+
+      
+    },
   },
   plugins: [],
 }

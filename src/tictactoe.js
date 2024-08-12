@@ -230,13 +230,13 @@ const TicTacToe = () => {
           delay: 0.2,
           duration: 1
         }}
-        className="text-4xl font-bold mb-10 text-white"
+        className="text-4xl font-playwrite font-extrabold mb-6 text-white"
       >
         Tic Tac Toe
       </motion.h1>
 
       {(!mode || !modeSelected || (mode === 'robot' && !difficultySelected)) && (
-        <div className="flex flex-col justify-center items-center py-20 mx-50 my-40">
+        <div className="flex flex-col font-signature justify-center items-center py-20 mx-50 my-40">
           {!mode && (
             <motion.div
               variants={portvarient}
@@ -258,9 +258,9 @@ const TicTacToe = () => {
                     {mode ? mode.charAt(0).toUpperCase() + mode.slice(1) : "Select Mode"}
                   </Select.Value>
                 </Select.Trigger>
-                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="fixed" align="end">
-                  <Select.Item value="multiplayer" className='border-2 py-3 w-[250px] hover:bg-custom-bg cursor-pointer text-xl'>Multiplayer</Select.Item>
-                  <Select.Item value="robot" className='border-2 py-3 w-[250px] hover:bg-custom-bg cursor-pointer text-xl'>Robot</Select.Item>
+                <Select.Content className=' text-white ' position="fixed" align="end">
+                  <Select.Item value="multiplayer" className='border-2 py-3 w-[200px] transition-transform duration-300 ease-in-out transform hover:scale-110 hover:bg-custom-bg bg-custom-box-bg cursor-pointer text-xl rounded-md'>Multiplayer</Select.Item>
+                  <Select.Item value="robot" className='border-2 py-3 w-[200px] transition-transform duration-300 ease-in-out transform hover:scale-110 hover:bg-custom-bg bg-custom-box-bg cursor-pointer text-xl rounded-md'>Robot</Select.Item>
                 </Select.Content>
               </Select.Root>
             </motion.div>
@@ -286,9 +286,9 @@ const TicTacToe = () => {
                     {difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.slice(1) : "Select Difficulty"}
                   </Select.Value>
                 </Select.Trigger>
-                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="fixed" align="end">
-                  <Select.Item value="easy" className='border-2 cursor-pointer py-3 w-[250px] hover:bg-custom-bg text-xl'>Easy</Select.Item>
-                  <Select.Item value="hard" className='border-2 cursor-pointer py-3 w-[250px] hover:bg-custom-bg text-xl'>Hard</Select.Item>
+                <Select.Content className='bg-custom-box-bg text-white ' position="fixed" align="end">
+                  <Select.Item value="easy" className='border-2 cursor-pointer py-3 w-[200px] transition-transform duration-300 ease-in-out transform hover:scale-110 hover:bg-custom-bg text-xl rounded-md'>Easy</Select.Item>
+                  <Select.Item value="hard" className='border-2 cursor-pointer py-3 w-[200px] transition-transform duration-300 ease-in-out transform hover:scale-110 hover:bg-custom-bg text-xl rounded-md'>Hard</Select.Item>
                 </Select.Content>
               </Select.Root>
             </motion.div>
@@ -328,7 +328,7 @@ const TicTacToe = () => {
             </div>
           </div>
           {mode && modeSelected && (
-            <div className='flex flex-row gap-5'>
+            <div className='flex flex-row font-signature gap-5'>
             <button
               className="mt-20 transition-transform duration-300 ease-in-out transform hover:scale-110 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem"
               onClick={resetGame}
@@ -360,7 +360,7 @@ const TicTacToe = () => {
             delay: 0.2,
             duration: 1
           }}
-          className="flex flex-col justify-center items-center gap-16 absolute inset-0 bg-custom-bg bg-opacity-75"
+          className="flex flex-col justify-center items-center font-roboto gap-16 absolute inset-0 bg-custom-bg bg-opacity-75"
         >
           <p className="text-5vmin w-96 font-semibold bg-custom-box-bg text-custom-btn-bg rounded-xl">{message}</p>
           <button
