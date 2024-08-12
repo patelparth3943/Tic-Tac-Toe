@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import * as Select from '@radix-ui/react-select';
-import {  motion } from "framer-motion";
-
+import { motion } from 'framer-motion';
 
 const TicTacToe = () => {
   const [boxes, setBoxes] = useState(Array(9).fill(''));
@@ -159,7 +158,7 @@ const TicTacToe = () => {
     if (!turnO && !gameOver && mode === 'robot') {
       timer = setTimeout(() => {
         aiMove();
-      }, 1000); // 3-second delay
+      }, 1000); // 1-second delay
     }
     return () => clearTimeout(timer); // Cleanup the timeout on component unmount or dependency change
   }, [turnO, mode, difficulty]);
@@ -169,11 +168,20 @@ const TicTacToe = () => {
     setTurnO(true);
     setMessage('');
     setGameOver(false);
+    // Keep mode and difficulty settings
+  };
+  const changemode = () => {
+    setBoxes(Array(9).fill(''));
+    setTurnO(true);
+    setMessage('');
+    setGameOver(false);
     setMode(null);
     setDifficulty(null);
     setModeSelected(false);
     setDifficultySelected(false);
   };
+
+   
 
   const handleModeChange = (value) => {
     setMode(value);
@@ -188,87 +196,99 @@ const TicTacToe = () => {
     setDifficultySelected(true);
   };
 
+  const portvarient = {
+    hidden: {
+      opacity: 0,
+      scale: 0.50
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+    },
+  };
 
-  const portvarient ={
-    hidden:{
-      opacity:0,
-      scale:0.50
+  const tic = {
+    hidden: {
+      opacity: 0,
+      x: -100
     },
-    visible:{
-      opacity:1,
-      scale:1,
+    visible: {
+      opacity: 1,
+      x: 0
     },
-    
-  }
-  const tic ={
-    hidden:{
-      opacity:0,
-      x:-100
-    },
-    visible:{
-      opacity:1,
-      x:0
-    },
-    
-  }
+  };
+
   return (
     <div className="flex flex-col items-center p-5 bg-custom-bg min-h-screen">
-      <motion.h1  variants={tic}
-             
-             initial="hidden"
-             whileInView="visible"
-             transition={{
-               type:'spring', 
-               stiffness:30,
-               delay:0.2,
-               duration:1}} className="text-4xl font-bold mb-10 text-white">Tic Tac Toe</motion.h1>
+      <motion.h1
+        variants={tic}
+        initial="hidden"
+        whileInView="visible"
+        transition={{
+          type: 'spring',
+          stiffness: 30,
+          delay: 0.2,
+          duration: 1
+        }}
+        className="text-4xl font-bold mb-10 text-white"
+      >
+        Tic Tac Toe
+      </motion.h1>
 
       {(!mode || !modeSelected || (mode === 'robot' && !difficultySelected)) && (
-        <div className="flex flex-col justify-center items-center h-screen">
+        <div className="flex flex-col justify-center items-center py-20 mx-50 my-40">
           {!mode && (
-                        <motion.div  
-                        variants={portvarient}
-             
-                        initial="hidden"
-                        whileInView="visible"
-                        transition={{
-                          type:'spring', 
-                          stiffness:30,
-                          delay:0.2,
-                          duration:1}} className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
-              <Select.Root onValueChange={handleModeChange}>
+            <motion.div
+              variants={portvarient}
+              initial="hidden"
+              whileInView="visible"
+              transition={{
+                type: 'spring',
+                stiffness: 30,
+                delay: 0.2,
+                duration: 1
+              }}
+            >
+              <Select.Root
+                className="flex flex-col items-center justify-center w-full max-w-md p-4"
+                onValueChange={handleModeChange}
+              >
                 <Select.Trigger className="w-[300px] h-[60px] bg-custom-box-bg cursor-pointer text-white text-xl rounded-md">
                   <Select.Value placeholder="Select Mode">
                     {mode ? mode.charAt(0).toUpperCase() + mode.slice(1) : "Select Mode"}
                   </Select.Value>
                 </Select.Trigger>
-                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="popper" align="end">
-                  <Select.Item value="multiplayer" className='border-2 py-3 px-14 cursor-pointer text-xl'>Multiplayer</Select.Item>
-                  <Select.Item value="robot" className='border-2 py-3 px-14 cursor-pointer text-xl'>Robot</Select.Item>
+                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="fixed" align="end">
+                  <Select.Item value="multiplayer" className='border-2 py-3 w-[250px] hover:bg-custom-bg cursor-pointer text-xl'>Multiplayer</Select.Item>
+                  <Select.Item value="robot" className='border-2 py-3 w-[250px] hover:bg-custom-bg cursor-pointer text-xl'>Robot</Select.Item>
                 </Select.Content>
               </Select.Root>
             </motion.div>
           )}
           {mode === 'robot' && modeSelected && !difficultySelected && (
-           <motion.div  
-           variants={portvarient}
-
-           initial="hidden"
-           whileInView="visible"
-           transition={{
-             type:'spring', 
-             stiffness:30,
-             delay:0.2,
-             duration:1}} className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4 mt-4">
-              <Select.Root onValueChange={handleDifficultyChange}>
+            <motion.div
+              variants={portvarient}
+              initial="hidden"
+              whileInView="visible"
+              transition={{
+                type: 'spring',
+                stiffness: 30,
+                delay: 0.2,
+                duration: 1
+              }}
+            >
+              <Select.Root
+                className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4"
+                onValueChange={handleDifficultyChange}
+              >
                 <Select.Trigger className="w-[300px] h-[60px] bg-custom-box-bg cursor-pointer text-white text-xl rounded-md">
                   <Select.Value placeholder="Select Difficulty">
                     {difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.slice(1) : "Select Difficulty"}
                   </Select.Value>
                 </Select.Trigger>
-                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="popper" align="end">
-                  <Select.Item value="easy" className='border-2 cursor-pointer py-3 px-14 text-xl'>Easy</Select.Item>
-                  <Select.Item value="hard" className='border-2 cursor-pointer py-3 px-14 text-xl'>Hard</Select.Item>
+                <Select.Content className='bg-custom-box-bg text-white rounded-md' position="fixed" align="end">
+                  <Select.Item value="easy" className='border-2 cursor-pointer py-3 w-[250px] hover:bg-custom-bg text-xl'>Easy</Select.Item>
+                  <Select.Item value="hard" className='border-2 cursor-pointer py-3 w-[250px] hover:bg-custom-bg text-xl'>Hard</Select.Item>
                 </Select.Content>
               </Select.Root>
             </motion.div>
@@ -287,16 +307,16 @@ const TicTacToe = () => {
           <div className="flex justify-center items-center h-4/5 mt-6">
             <div className="grid grid-cols-3 max-w-md mx-auto justify-center items-center gap-6 w-60vmin h-60vmin">
               {boxes.map((box, index) => (
-                 <motion.button
-                 variants={portvarient}
-      
-                 initial="hidden"
-                 whileInView="visible"
-                 transition={{
-                   type:'spring', 
-                   stiffness:30,
-                   delay:index*0.2,
-                   duration:1}}
+                <motion.button
+                  variants={portvarient}
+                  initial="hidden"
+                  whileInView="visible"
+                  transition={{
+                    type: 'spring',
+                    stiffness: 30,
+                    delay: index * 0.2,
+                    duration: 1
+                  }}
                   key={index}
                   className="w-18vmin h-18vmin bg-custom-box-bg text-custom-box-text text-8vmin font-bold flex items-center justify-center rounded-1rem shadow-custom"
                   onClick={() => handleBoxClick(index)}
@@ -308,24 +328,48 @@ const TicTacToe = () => {
             </div>
           </div>
           {mode && modeSelected && (
-            <button className="mt-20 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>Reset Game</button>
+            <div className='flex flex-row gap-5'>
+            <button
+              className="mt-20 transition-transform duration-300 ease-in-out transform hover:scale-110 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem"
+              onClick={resetGame}
+            >
+              Reset Game
+            </button>
+            <button
+              className="mt-20 transition-transform duration-300 ease-in-out transform hover:scale-110 bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem"
+              onClick={changemode}
+            >
+              Change Mode 
+            </button>
+            </div>
+
           )}
+          
+
         </div>
       )}
 
       {message && (
-         <motion.div  
-         variants={portvarient}
-
-         initial="hidden"
-         whileInView="visible"
-         transition={{
-           type:'spring', 
-           stiffness:30,
-           delay:0.2,
-           duration:1}} className="flex flex-col justify-center items-center gap-16 absolute inset-0 bg-custom-bg bg-opacity-75">
+        <motion.div
+          variants={portvarient}
+          initial="hidden"
+          whileInView="visible"
+          transition={{
+            type: 'spring',
+            stiffness: 30,
+            delay: 0.2,
+            duration: 1
+          }}
+          className="flex flex-col justify-center items-center gap-16 absolute inset-0 bg-custom-bg bg-opacity-75"
+        >
           <p className="text-5vmin w-96 font-semibold bg-custom-box-bg text-custom-btn-bg rounded-xl">{message}</p>
-          <button className="bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem" onClick={resetGame}>New Game</button>
+          <button
+            className="bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem"
+            onClick={resetGame}
+          >
+            New Game
+          </button>
+          
         </motion.div>
       )}
     </div>
@@ -333,7 +377,3 @@ const TicTacToe = () => {
 };
 
 export default TicTacToe;
-
-
-
-
