@@ -1,9 +1,14 @@
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import * as Select from '@radix-ui/react-select';
 import { motion } from 'framer-motion';
+import FullPageTextSpinnerLoader from './FullPageTextSpinnerLoader.js';
+
 
 const TicTacToe = () => {
+  const [loading, setLoading] = useState(true);
+
   const [boxes, setBoxes] = useState(Array(9).fill(''));
   const [turnO, setTurnO] = useState(true);
   const [message, setMessage] = useState('');
@@ -158,9 +163,9 @@ const TicTacToe = () => {
     if (!turnO && !gameOver && mode === 'robot') {
       timer = setTimeout(() => {
         aiMove();
-      }, 1000); // 1-second delay
+      }, 1000); 
     }
-    return () => clearTimeout(timer); // Cleanup the timeout on component unmount or dependency change
+    return () => clearTimeout(timer); 
   }, [turnO, mode, difficulty]);
 
   const resetGame = () => {
@@ -168,20 +173,22 @@ const TicTacToe = () => {
     setTurnO(true);
     setMessage('');
     setGameOver(false);
-    // Keep mode and difficulty settings
+   
   };
   const changemode = () => {
-    setBoxes(Array(9).fill(''));
-    setTurnO(true);
-    setMessage('');
-    setGameOver(false);
-    setMode(null);
-    setDifficulty(null);
-    setModeSelected(false);
-    setDifficultySelected(false);
+    setLoading(true); 
+      setTimeout(() => {
+      setBoxes(Array(9).fill(''));
+      setTurnO(true);
+      setMessage('');
+      setGameOver(false);
+      setMode(null);
+      setDifficulty(null);
+      setModeSelected(false);
+      setDifficultySelected(false);
+      setLoading(false); 
+    }, 2000); 
   };
-
-   
 
   const handleModeChange = (value) => {
     setMode(value);
@@ -217,6 +224,18 @@ const TicTacToe = () => {
       x: 0
     },
   };
+
+  useEffect(() => {
+    // Simulate loading time (e.g., fetching data, initializing game state)
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust the timeout as needed
+  }, []);
+
+
+  if (loading) {
+    return <FullPageTextSpinnerLoader />;
+  }
 
   return (
     <div className="flex flex-col items-center p-5 bg-custom-bg min-h-screen">
