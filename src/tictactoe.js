@@ -1,14 +1,13 @@
-
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import * as Select from '@radix-ui/react-select';
 import { motion } from 'framer-motion';
+import MobileLoader from './MobileLoader';
 import FullPageTextSpinnerLoader from './FullPageTextSpinnerLoader.js';
-
 
 const TicTacToe = () => {
   const [loading, setLoading] = useState(true);
-
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [boxes, setBoxes] = useState(Array(9).fill(''));
   const [turnO, setTurnO] = useState(true);
   const [message, setMessage] = useState('');
@@ -173,11 +172,11 @@ const TicTacToe = () => {
     setTurnO(true);
     setMessage('');
     setGameOver(false);
-   
   };
+
   const changemode = () => {
     setLoading(true); 
-      setTimeout(() => {
+    setTimeout(() => {
       setBoxes(Array(9).fill(''));
       setTurnO(true);
       setMessage('');
@@ -226,15 +225,24 @@ const TicTacToe = () => {
   };
 
   useEffect(() => {
+    // Update the isMobile state on window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     // Simulate loading time (e.g., fetching data, initializing game state)
     setTimeout(() => {
       setLoading(false);
     }, 2000); // Adjust the timeout as needed
   }, []);
 
-
   if (loading) {
-    return <FullPageTextSpinnerLoader />;
+    return isMobile ? <MobileLoader /> : <FullPageTextSpinnerLoader />;
   }
 
   return (
@@ -363,8 +371,6 @@ const TicTacToe = () => {
             </div>
 
           )}
-          
-
         </div>
       )}
 
@@ -388,7 +394,6 @@ const TicTacToe = () => {
           >
             New Game
           </button>
-          
         </motion.div>
       )}
     </div>
