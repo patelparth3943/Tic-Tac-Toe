@@ -1,3 +1,6 @@
+
+
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import * as Select from '@radix-ui/react-select';
@@ -348,6 +351,15 @@ const TicTacToe = () => {
                   className="w-18vmin h-18vmin bg-custom-box-bg text-custom-box-text text-8vmin font-bold flex items-center justify-center rounded-1rem shadow-custom"
                   onClick={() => handleBoxClick(index)}
                   disabled={gameOver || box}
+                  whileTap={{
+                    scale: 0.95, // Slightly smaller for a click effect
+                    transition: {
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 20, // Reduces the "bounce" for smoothness
+                      duration: 0.2, // Duration of the scale effect
+                    }
+                  }}
                 >
                   {box}
                 </motion.button>
@@ -392,7 +404,7 @@ const TicTacToe = () => {
             className="bg-custom-btn-bg font-bold text-black px-4 py-2 rounded-1rem"
             onClick={resetGame}
           >
-            New Game
+            Restart Game
           </button>
         </motion.div>
       )}
